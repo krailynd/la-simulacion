@@ -1,0 +1,123 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated color palette for educational physics theme */
+  --background: #fefce8; /* Light cream background for a soft, inviting feel */
+  --foreground: #374151; /* Dark slate gray for primary text */
+  --card: #ffffff; /* White cards for simulations */
+  --card-foreground: #374151; /* Dark slate gray for text within cards */
+  --popover: #ffffff; /* White for popovers */
+  --popover-foreground: #374151; /* Dark slate gray for popover text */
+  --primary: #d97706; /* Amber for primary actions */
+  --primary-foreground: #ffffff; /* White text on primary buttons */
+  --secondary: #f59e0b; /* Amber-400 for secondary actions */
+  --secondary-foreground: #ffffff; /* White text on secondary buttons */
+  --muted: #fefce8; /* Light cream for muted elements */
+  --muted-foreground: #4b5563; /* Dark muted text */
+  --accent: #f59e0b; /* Amber-400 for accents */
+  --accent-foreground: #ffffff; /* White text on accent elements */
+  --destructive: #dc2626; /* Red-600 for destructive actions */
+  --destructive-foreground: #ffffff; /* White text for destructive elements */
+  --border: #e5e7eb; /* Light gray for borders */
+  --input: #ffffff; /* White for input fields */
+  --ring: rgba(217, 119, 6, 0.5); /* Semi-transparent amber ring for focus states */
+  --radius: 0.5rem; /* Rounded corners for buttons and cards */
+  --sidebar: #ffffff; /* White for sidebar background */
+  --sidebar-foreground: #374151; /* Dark slate gray for sidebar text */
+  --sidebar-primary: #d97706; /* Amber for primary sidebar elements */
+  --sidebar-primary-foreground: #ffffff; /* White text on sidebar primary elements */
+  --sidebar-accent: #f59e0b; /* Amber-400 for sidebar accents */
+  --sidebar-accent-foreground: #ffffff; /* White text on sidebar accents */
+  --sidebar-border: #e5e7eb; /* Light gray for sidebar borders */
+  --sidebar-ring: rgba(217, 119, 6, 0.5); /* Semi-transparent amber ring for sidebar focus states */
+
+  /* Chart colors for physics data visualization */
+  --chart-1: #d97706; /* Amber */
+  --chart-2: #0ea5e9; /* Sky blue */
+  --chart-3: #10b981; /* Emerald */
+  --chart-4: #8b5cf6; /* Violet */
+  --chart-5: #f59e0b; /* Amber-400 */
+}
+
+.dark {
+  --background: #1f2937; /* Dark gray background */
+  --foreground: #f9fafb; /* Light gray text */
+  --card: #374151; /* Dark slate cards */
+  --card-foreground: #f9fafb; /* Light text on cards */
+  --popover: #374151; /* Dark popovers */
+  --popover-foreground: #f9fafb; /* Light text on popovers */
+  --primary: #f59e0b; /* Amber for primary actions */
+  --primary-foreground: #1f2937; /* Dark text on primary buttons */
+  --secondary: #4b5563; /* Gray for secondary actions */
+  --secondary-foreground: #f9fafb; /* Light text on secondary buttons */
+  --muted: #4b5563; /* Gray for muted elements */
+  --muted-foreground: #9ca3af; /* Light gray muted text */
+  --accent: #f59e0b; /* Amber for accents */
+  --accent-foreground: #1f2937; /* Dark text on accent elements */
+  --destructive: #ef4444; /* Red for destructive actions */
+  --destructive-foreground: #ffffff; /* White text for destructive elements */
+  --border: #4b5563; /* Gray borders */
+  --input: #374151; /* Dark input fields */
+  --ring: rgba(245, 158, 11, 0.5); /* Semi-transparent amber ring */
+  --sidebar: #374151; /* Dark sidebar */
+  --sidebar-foreground: #f9fafb; /* Light sidebar text */
+  --sidebar-primary: #f59e0b; /* Amber for primary sidebar elements */
+  --sidebar-primary-foreground: #1f2937; /* Dark text on sidebar primary */
+  --sidebar-accent: #4b5563; /* Gray for sidebar accents */
+  --sidebar-accent-foreground: #f9fafb; /* Light text on sidebar accents */
+  --sidebar-border: #4b5563; /* Gray sidebar borders */
+  --sidebar-ring: rgba(245, 158, 11, 0.5); /* Semi-transparent amber ring */
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
