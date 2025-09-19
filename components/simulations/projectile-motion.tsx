@@ -705,7 +705,7 @@ export function ProjectileMotionSimulation() {
             {/* Imagen de referencia de resultados PhET */}
             <div className={`mt-4 p-3 rounded-lg ${isDarkMode ? "bg-slate-700" : "bg-gray-100"}`}>
               <img
-                src="#"
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Imagen%20de%20WhatsApp%202025-09-15%20a%20las%2016.58.35_5336767c.jpg-II8FeWVn3TOJogj0108Y2l3QkWEYux.jpeg"
                 alt="Simulación PhET de movimiento de proyectiles"
                 className="w-full h-auto mx-auto rounded"
               />

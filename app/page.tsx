@@ -1,397 +1,335 @@
 "use client"
 
 // Importaciones necesarias para React y componentes UI
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Switch } from "@/components/ui/switch"
 // Importación de las simulaciones de física
 import { BalancingActSimulation } from "@/components/simulations/balancing-act"
 import { ProjectileMotionSimulation } from "@/components/simulations/projectile-motion"
 // Iconos de Lucide React para la interfaz
-import { Scale, Target, Home, BookOpen, Calculator, Moon, Sun } from "lucide-react"
+import { Scale, Target, Calculator, BookOpen, Zap, Gamepad2 } from "lucide-react"
 import Link from "next/link"
 
-// Configuración de las simulaciones disponibles
+// Configuración de las simulaciones disponibles con tema espacial
 const simulations = [
   {
     id: "balancing-act", // ID único para identificar la simulación
     title: "Acto de Equilibrio", // Título mostrado al usuario
-    description: "Aprende sobre torque y equilibrio con una balanza interactiva.", // Descripción educativa
+    description: "Explora las fuerzas gravitacionales y el equilibrio en el cosmos.",
     icon: Scale, // Icono de balanza
     component: BalancingActSimulation, // Componente React de la simulación
-    color: "bg-purple-500", // <-- EDITABLE: Color de fondo del ícono (puedes cambiar por bg-blue-500, bg-green-500, etc.)
+    color: "from-purple-600 to-indigo-700", // <-- EDITABLE: Gradiente espacial
+    glowColor: "shadow-purple-500/30", // <-- EDITABLE: Color del brillo
+    preview: "/physics-balance-simulation-with-scales-and-weights.jpg", // <-- CHANGE: Imagen de previsualización
   },
   {
     id: "projectile-motion", // ID único para movimiento de proyectiles
     title: "Movimiento de Proyectiles", // Título de la simulación
-    description: "Simula el movimiento de objetos lanzados bajo la influencia de la gravedad.", // Descripción física
+    description: "Simula trayectorias de objetos en campos gravitacionales complejos.",
     icon: Target, // Icono de objetivo
     component: ProjectileMotionSimulation, // Componente de la simulación
-    color: "bg-red-500", // <-- EDITABLE: Color de fondo del ícono (puedes cambiar por bg-orange-500, bg-pink-500, etc.)
+    color: "from-orange-600 to-red-700", // <-- EDITABLE: Gradiente espacial
+    glowColor: "shadow-orange-500/30", // <-- EDITABLE: Color del brillo
+    preview: "/projectile-motion-physics-simulation-with-cannon-a.jpg", // <-- CHANGE: Imagen de previsualización
   },
 ]
 
-// Componente principal de la aplicación de simulaciones de física
+// <-- CHANGE: Nuevas secciones educativas agregadas
+const educationalSections = [
+  {
+    id: "physics-game",
+    title: "Juego de Física",
+    description: "Resuelve problemas de física contra el tiempo y ve tus respuestas cobrar vida.",
+    icon: Gamepad2,
+    color: "from-green-600 to-emerald-700",
+    glowColor: "shadow-green-500/30",
+    preview: "/physics-game-interface-with-timer-and-projectile-p.jpg",
+    href: "/physics-game",
+  },
+  {
+    id: "dimensional-analysis",
+    title: "Análisis Dimensional",
+    description: "Domina las ecuaciones dimensionales y la consistencia de unidades.",
+    icon: BookOpen,
+    color: "from-blue-600 to-cyan-700",
+    glowColor: "shadow-blue-500/30",
+    preview: "/dimensional-analysis-physics-formulas-and-units-co.jpg",
+    href: "/dimensional-analysis",
+  },
+  {
+    id: "statics",
+    title: "Estática",
+    description: "Analiza fuerzas en equilibrio y estructuras estables.",
+    icon: Zap,
+    color: "from-yellow-600 to-orange-700",
+    glowColor: "shadow-yellow-500/30",
+    preview: "/statics-physics-forces-equilibrium-structures.jpg",
+    href: "/statics",
+  },
+  {
+    id: "calculator",
+    title: "Calculadora Cuántica",
+    description: "Calculadora científica avanzada con capacidades de análisis dimensional.",
+    icon: Calculator,
+    color: "from-cyan-600 to-blue-700",
+    glowColor: "shadow-cyan-500/30",
+    preview: "/scientific-calculator-interface-with-physics-formu.jpg",
+    href: "/calculator",
+  },
+]
+
+// Componente principal de la aplicación de simulaciones de física con tema Interstellar
 export default function PhysicsSimulationsHome() {
   // Estado para controlar qué simulación está activa (null = página principal)
   const [activeSimulation, setActiveSimulation] = useState<string | null>(null)
-  // Estado para controlar el modo oscuro/claro
-  const [isDarkMode, setIsDarkMode] = useState(false)
+  // Estado para la animación de carga inicial
+  const [isLoading, setIsLoading] = useState(true)
+  // Estado para controlar las animaciones de entrada
+  const [showContent, setShowContent] = useState(false)
+
+  // Efecto para la animación de carga inicial tipo agujero negro
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+      setTimeout(() => setShowContent(true), 300)
+    }, 2500) // <-- EDITABLE: Duración de la animación de carga (2.5 segundos)
+
+    return () => clearTimeout(timer)
+  }, [])
 
   // Buscar el componente de la simulación activa
   const ActiveComponent = activeSimulation ? simulations.find((sim) => sim.id === activeSimulation)?.component : null
 
-  // Función para alternar entre modo oscuro y claro
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode)
-    // Aplicar la clase 'dark' al elemento html para activar el modo oscuro de Tailwind
-    document.documentElement.classList.toggle("dark", !isDarkMode)
+  // Pantalla de carga con animación de agujero negro
+  if (isLoading) {
+    return (
+      // <-- EDITABLE: Fondo de la pantalla de carga
+      <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        {/* Fondo espacial animado con menor opacidad */}
+        {/* <-- EDITABLE: URL del GIF de fondo espacial difuminado */}
+        <div
+          className="absolute inset-0 opacity-20 blur-sm"
+          style={{
+            backgroundImage: "url('https://i.pinimg.com/originals/9c/40/8a/9c408a7a291d363c43c8f2cd5f1c5ddf.gif')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
+
+        {/* Animación de agujero negro */}
+        <div className="relative z-10 flex flex-col items-center">
+          {/* Agujero negro giratorio */}
+          <div className="relative">
+            {/* Anillo exterior giratorio */}
+            <div className="w-32 h-32 border-4 border-transparent border-t-orange-500 border-r-orange-400 rounded-full animate-spin"></div>
+            {/* Anillo medio */}
+            <div
+              className="absolute top-2 left-2 w-28 h-28 border-4 border-transparent border-t-blue-400 border-r-purple-500 rounded-full animate-spin"
+              style={{ animationDirection: "reverse", animationDuration: "1.5s" }}
+            ></div>
+            {/* Centro del agujero negro */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-black rounded-full shadow-2xl shadow-orange-500/50"></div>
+            {/* Efecto de distorsión */}
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-gradient-radial from-transparent via-orange-500/20 to-transparent rounded-full animate-pulse"></div>
+          </div>
+
+          {/* Texto de carga */}
+          <div className="mt-8 text-center">
+            <h2 className="text-2xl font-bold text-white mb-2 animate-pulse">Iniciando Laboratorio Cuántico</h2>
+            <p className="text-gray-300 animate-pulse">Cargando simulaciones interactivas...</p>
+          </div>
+        </div>
+
+        {/* Partículas flotantes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(20)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${2 + Math.random() * 3}s`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    )
   }
 
   return (
-    // Contenedor principal con altura completa y fondo adaptable al tema
-    // <-- EDITABLE: Puedes cambiar 'bg-background' por 'bg-slate-50', 'bg-gray-100', etc.
-    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? "dark bg-gray-900" : "bg-background"}`}>
-      {/* Encabezado de la aplicación */}
-      {/* <-- EDITABLE: Puedes cambiar 'bg-card' por 'bg-white', 'bg-slate-100', etc. */}
-      <header
-        className={`border-b border-border transition-colors duration-300 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-card"}`}
-      >
-        <div className="container mx-auto px-4 py-6">
-          {" "}
-          {/* Contenedor responsivo con padding */}
-          <div className="flex items-center justify-between">
-            {" "}
-            {/* Flexbox para alinear elementos */}
-            {/* Logo y título de la aplicación */}
-            <div className="flex items-center gap-3">
-              {/* Icono del logo */}
-              {/* <-- EDITABLE: Puedes cambiar 'bg-primary' por 'bg-blue-600', 'bg-green-600', etc. */}
-              <div
-                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-300 ${isDarkMode ? "bg-blue-600" : "bg-primary"}`}
-              >
-                <BookOpen className={`w-6 h-6 ${isDarkMode ? "text-white" : "text-primary-foreground"}`} />
-              </div>
-              {/* Información del título */}
-              <div>
-                <h1
-                  className={`text-2xl font-bold transition-colors duration-300 ${isDarkMode ? "text-white" : "text-foreground"}`}
-                >
-                  Simulaciones de Física
-                </h1>
-                <p
-                  className={`transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}
-                >
-                  Laboratorio Virtual Interactivo
-                </p>
-              </div>
-            </div>
-            {/* Controles del encabezado */}
-            <div className="flex items-center gap-2">
-              {/* Control de modo oscuro */}
-              <div className="flex items-center gap-2">
-                <Sun className={`w-4 h-4 ${isDarkMode ? "text-gray-400" : "text-yellow-500"}`} />
-                <Switch
-                  checked={isDarkMode}
-                  onCheckedChange={toggleDarkMode}
-                  className="data-[state=checked]:bg-blue-600"
-                />
-                <Moon className={`w-4 h-4 ${isDarkMode ? "text-blue-400" : "text-gray-400"}`} />
-              </div>
+    // Contenedor principal con fondo espacial y tema oscuro elegante
+    <div className="min-h-screen relative overflow-hidden">
+      {/* <-- EDITABLE: Fondo principal con GIF espacial difuminado */}
+      <div
+        className="fixed inset-0 z-0 opacity-40 blur-[1px]"
+        style={{
+          backgroundImage: "url('https://i.pinimg.com/originals/9c/40/8a/9c408a7a291d363c43c8f2cd5f1c5ddf.gif')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
 
-              {/* Enlace a la calculadora científica */}
-              {/* <-- REDIRECCIÓN: Este <Link> redirige a la página /calculator */}
-              <Link href="/calculator">
-                <Button
-                  variant="outline"
-                  className={`flex items-center gap-2 transition-colors duration-300 ${isDarkMode ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600" : "bg-transparent"}`}
-                >
-                  <Calculator className="w-4 h-4" />
-                  Calculadora Científica
-                </Button>
-              </Link>
-
-              {/* Botón para volver al inicio (solo visible cuando hay una simulación activa) */}
-              {activeSimulation && (
-                <Button
-                  variant="outline"
-                  onClick={() => setActiveSimulation(null)} // Función para volver a la página principal
-                  className={`flex items-center gap-2 transition-colors duration-300 ${isDarkMode ? "bg-gray-700 border-gray-600 text-white hover:bg-gray-600" : ""}`}
-                >
-                  <Home className="w-4 h-4" />
-                  Volver al Inicio
-                </Button>
-              )}
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Navegación entre simulaciones (solo visible cuando hay una simulación activa) */}
-      {activeSimulation && (
-        // <-- EDITABLE: Puedes cambiar 'bg-card' por 'bg-white', 'bg-slate-50', etc.
-        <nav
-          className={`border-b border-border transition-colors duration-300 ${isDarkMode ? "bg-gray-800 border-gray-700" : "bg-card"}`}
-        >
-          <div className="container mx-auto px-4">
-            <div className="flex gap-2 py-3 overflow-x-auto">
-              {" "}
-              {/* Scroll horizontal para dispositivos móviles */}
-              {simulations.map((sim) => {
-                const Icon = sim.icon // Obtener el componente del icono
-                return (
-                  <Button
-                    key={sim.id}
-                    variant={activeSimulation === sim.id ? "default" : "ghost"} // Estilo activo/inactivo
-                    size="sm"
-                    onClick={() => setActiveSimulation(sim.id)} // Cambiar simulación activa
-                    className={`flex items-center gap-2 whitespace-nowrap transition-colors duration-300 ${
-                      isDarkMode
-                        ? activeSimulation === sim.id
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-300 hover:bg-gray-700"
-                        : ""
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {sim.title}
-                  </Button>
-                )
-              })}
-            </div>
-          </div>
-        </nav>
-      )}
+      {/* Overlay oscuro para mejorar legibilidad */}
+      {/* <-- EDITABLE: Opacidad del overlay */}
+      <div className="fixed inset-0 bg-black/80 z-10" />
 
       {/* Contenido principal */}
-      <main className="container mx-auto px-4 py-8">
-        {!activeSimulation ? (
-          /* Vista de la página principal */
-          <div className="space-y-8">
-            {/* Sección de bienvenida */}
-            <div className="text-center space-y-4">
-              <h2
-                className={`text-3xl font-bold text-balance transition-colors duration-300 ${isDarkMode ? "text-white" : ""}`}
-              >
-                Explora el Mundo de la Física
-              </h2>
-              <p
-                className={`text-lg max-w-2xl mx-auto text-pretty transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}
-              >
-                Descubre los principios fundamentales de la física a través de simulaciones interactivas. Cada
-                experimento te ayudará a comprender conceptos complejos de manera visual y práctica.
-              </p>
-            </div>
+      <div className="relative z-20 min-h-screen">
+        {/* <-- CHANGE: Header eliminado completamente */}
 
-            {/* Grid de simulaciones disponibles */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              {simulations.map((simulation) => {
-                const Icon = simulation.icon
-                return (
-                  <Card
-                    key={simulation.id}
-                    className={`hover:shadow-lg transition-all duration-300 cursor-pointer group ${
-                      isDarkMode
-                        ? "bg-gray-800 border-gray-700 hover:bg-gray-750 hover:shadow-blue-500/20"
-                        : "hover:shadow-lg"
-                    }`}
-                    onClick={() => setActiveSimulation(simulation.id)} // Activar simulación al hacer clic
-                  >
-                    <CardHeader>
-                      <div className="flex items-center gap-3">
-                        {/* Icono de la simulación */}
-                        {/* <-- EDITABLE: El color se define en simulation.color arriba */}
-                        <div
-                          className={`w-12 h-12 ${simulation.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
-                        >
-                          <Icon className="w-6 h-6 text-white" />
+        {/* Contenido principal */}
+        <main className="container mx-auto px-4 py-12">
+          {!activeSimulation ? (
+            /* Vista de la página principal con animaciones de entrada */
+            <div
+              className={`space-y-12 transition-all duration-1000 ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+            >
+              {/* Título principal con efecto espacial */}
+              <div className="text-center space-y-6">
+                <h1 className="text-6xl font-bold text-white mb-4 bg-gradient-to-r from-blue-400 via-purple-500 to-orange-400 bg-clip-text text-transparent animate-pulse">
+                  Laboratorio Cuántico
+                </h1>
+                <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                  Explora el cosmos de la física a través de simulaciones interactivas, juegos educativos y herramientas
+                  avanzadas de cálculo.
+                </p>
+              </div>
+
+              {/* <-- CHANGE: Grid de simulaciones principales con previsualizaciones */}
+              <div className="space-y-8">
+                <h2 className="text-3xl font-bold text-white text-center mb-8">Simulaciones Principales</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                  {simulations.map((simulation, index) => {
+                    const Icon = simulation.icon
+                    return (
+                      <Card
+                        key={simulation.id}
+                        className={`bg-black/40 border-white/20 backdrop-blur-md hover:bg-black/60 transition-all duration-500 cursor-pointer group hover:scale-105 hover:${simulation.glowColor} hover:shadow-2xl ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                        style={{ animationDelay: `${index * 200}ms` }}
+                        onClick={() => setActiveSimulation(simulation.id)}
+                      >
+                        {/* <-- CHANGE: Imagen de previsualización agregada */}
+                        <div className="relative overflow-hidden rounded-t-lg">
+                          <img
+                            src={simulation.preview || "/placeholder.svg"}
+                            alt={`Preview de ${simulation.title}`}
+                            className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                          <div className="absolute top-4 right-4">
+                            <div
+                              className={`w-12 h-12 bg-gradient-to-br ${simulation.color} rounded-lg flex items-center justify-center shadow-lg ${simulation.glowColor}`}
+                            >
+                              <Icon className="w-6 h-6 text-white" />
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle
-                            className={`text-xl transition-colors duration-300 ${isDarkMode ? "text-white" : ""}`}
-                          >
+
+                        <CardHeader>
+                          <CardTitle className="text-2xl text-white group-hover:text-blue-300 transition-colors">
                             {simulation.title}
                           </CardTitle>
-                          <Badge
-                            variant="secondary"
-                            className={`mt-1 transition-colors duration-300 ${isDarkMode ? "bg-gray-700 text-gray-300" : ""}`}
-                          >
-                            Interactivo
+                          <Badge className="w-fit bg-gradient-to-r from-blue-600 to-purple-600 text-white border-none">
+                            Simulación Interactiva
                           </Badge>
+                        </CardHeader>
+                        <CardContent>
+                          <CardDescription className="text-gray-300 text-lg leading-relaxed mb-6">
+                            {simulation.description}
+                          </CardDescription>
+                          <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-none text-lg py-3 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30">
+                            Iniciar Simulación
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
+                </div>
+              </div>
+
+              {/* <-- CHANGE: Secciones educativas adicionales */}
+              <div className="space-y-8">
+                <h2 className="text-3xl font-bold text-white text-center mb-8">Herramientas de Aprendizaje</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                  {educationalSections.map((section, index) => {
+                    const Icon = section.icon
+                    return (
+                      <Card
+                        key={section.id}
+                        className={`bg-black/40 border-white/20 backdrop-blur-md hover:bg-black/60 transition-all duration-500 cursor-pointer group hover:scale-105 hover:${section.glowColor} hover:shadow-2xl ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                        style={{ animationDelay: `${(index + 2) * 200}ms` }}
+                      >
+                        {/* <-- CHANGE: Imagen de previsualización para cada sección */}
+                        <div className="relative overflow-hidden rounded-t-lg">
+                          <img
+                            src={section.preview || "/placeholder.svg"}
+                            alt={`Preview de ${section.title}`}
+                            className="w-full h-32 object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                          <div className="absolute top-2 right-2">
+                            <div
+                              className={`w-8 h-8 bg-gradient-to-br ${section.color} rounded-lg flex items-center justify-center shadow-lg ${section.glowColor}`}
+                            >
+                              <Icon className="w-4 h-4 text-white" />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription
-                        className={`text-base leading-relaxed transition-colors duration-300 ${isDarkMode ? "text-gray-300" : ""}`}
-                      >
-                        {simulation.description}
-                      </CardDescription>
-                      <Button
-                        className={`w-full mt-4 group-hover:bg-primary/90 transition-colors duration-300 ${
-                          isDarkMode ? "bg-blue-600 hover:bg-blue-700 text-white" : ""
-                        }`}
-                      >
-                        Iniciar Simulación
-                      </Button>
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
 
-            {/* Tarjeta de la calculadora científica */}
-            <div className="max-w-2xl mx-auto">
-              <Card
-                className={`hover:shadow-lg transition-all duration-300 ${
-                  isDarkMode
-                    ? "bg-gray-800 border-gray-700 hover:bg-gray-750 hover:shadow-blue-500/20"
-                    : "hover:shadow-lg"
-                }`}
-              >
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    {/* <-- EDITABLE: Puedes cambiar 'bg-blue-500' por otro color */}
-                    <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                      <Calculator className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <CardTitle className={`text-xl transition-colors duration-300 ${isDarkMode ? "text-white" : ""}`}>
-                        Calculadora Científica
-                      </CardTitle>
-                      <Badge
-                        variant="secondary"
-                        className={`mt-1 transition-colors duration-300 ${isDarkMode ? "bg-gray-700 text-gray-300" : ""}`}
-                      >
-                        Herramienta
-                      </Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription
-                    className={`text-base leading-relaxed transition-colors duration-300 ${isDarkMode ? "text-gray-300" : ""}`}
-                  >
-                    Calculadora científica avanzada con funciones matemáticas, gráficos y herramientas estilo GeoGebra
-                    para resolver problemas de física.
-                  </CardDescription>
-                  {/* <-- REDIRECCIÓN: Este <Link> redirige a la página /calculator */}
-                  <Link href="/calculator">
-                    <Button
-                      className={`w-full mt-4 transition-colors duration-300 ${
-                        isDarkMode ? "bg-blue-600 hover:bg-blue-700 text-white" : ""
-                      }`}
-                    >
-                      Abrir Calculadora
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Sección de instrucciones */}
-            {/* <-- EDITABLE: Puedes cambiar 'bg-card' por 'bg-white', 'bg-slate-50', etc. */}
-            <div
-              className={`rounded-lg p-6 border transition-colors duration-300 ${
-                isDarkMode ? "bg-gray-800 border-gray-700" : "bg-card border-border"
-              }`}
-            >
-              <h3
-                className={`text-xl font-semibold mb-4 transition-colors duration-300 ${isDarkMode ? "text-white" : ""}`}
-              >
-                Instrucciones de Uso
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                {/* Cada sección de instrucciones */}
-                <div className="space-y-2">
-                  <h4
-                    className={`font-medium transition-colors duration-300 ${isDarkMode ? "text-blue-400" : "text-primary"}`}
-                  >
-                    🎯 Cómo Empezar
-                  </h4>
-                  <p
-                    className={`transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}
-                  >
-                    Haz clic en cualquier simulación para comenzar. Cada una incluye controles interactivos y
-                    explicaciones.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4
-                    className={`font-medium transition-colors duration-300 ${isDarkMode ? "text-blue-400" : "text-primary"}`}
-                  >
-                    🔧 Controles
-                  </h4>
-                  <p
-                    className={`transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}
-                  >
-                    Usa los deslizadores y botones para modificar variables y observar los cambios en tiempo real.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4
-                    className={`font-medium transition-colors duration-300 ${isDarkMode ? "text-blue-400" : "text-primary"}`}
-                  >
-                    📊 Datos
-                  </h4>
-                  <p
-                    className={`transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}
-                  >
-                    Observa las gráficas y mediciones que se actualizan automáticamente con tus experimentos.
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <h4
-                    className={`font-medium transition-colors duration-300 ${isDarkMode ? "text-blue-400" : "text-primary"}`}
-                  >
-                    🧮 Calculadora
-                  </h4>
-                  <p
-                    className={`transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}
-                  >
-                    Usa la calculadora científica para resolver problemas complejos y verificar tus cálculos.
-                  </p>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-lg text-white group-hover:text-blue-300 transition-colors">
+                            {section.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <CardDescription className="text-gray-300 text-sm leading-relaxed mb-4">
+                            {section.description}
+                          </CardDescription>
+                          {/* <-- REDIRECCIÓN: Enlaces a páginas específicas */}
+                          <Link href={section.href}>
+                            <Button
+                              className={`w-full bg-gradient-to-r ${section.color} hover:opacity-90 text-white border-none text-sm py-2 transition-all duration-300 hover:shadow-lg hover:${section.glowColor}`}
+                            >
+                              Explorar
+                            </Button>
+                          </Link>
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
                 </div>
               </div>
             </div>
-          </div>
-        ) : (
-          /* Vista de simulación activa */
-          <div className="space-y-6">
-            {/* Título de la simulación activa */}
-            <div className="text-center">
-              <h2 className={`text-2xl font-bold transition-colors duration-300 ${isDarkMode ? "text-white" : ""}`}>
-                {simulations.find((sim) => sim.id === activeSimulation)?.title}
-              </h2>
-              <p className={`transition-colors duration-300 ${isDarkMode ? "text-gray-300" : "text-muted-foreground"}`}>
-                {simulations.find((sim) => sim.id === activeSimulation)?.description}
-              </p>
+          ) : (
+            /* Vista de simulación activa */
+            <div className="space-y-6">
+              {/* Navegación de simulación */}
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-3xl font-bold text-white">
+                  {simulations.find((sim) => sim.id === activeSimulation)?.title}
+                </h2>
+                <Button
+                  variant="outline"
+                  onClick={() => setActiveSimulation(null)}
+                  className="bg-black/40 border-white/20 text-white hover:bg-black/60 backdrop-blur-md"
+                >
+                  Volver al Laboratorio
+                </Button>
+              </div>
+
+              {/* Renderizar el componente de la simulación activa */}
+              {ActiveComponent && <ActiveComponent />}
             </div>
-
-            {/* Renderizar el componente de la simulación activa */}
-            {ActiveComponent && <ActiveComponent />}
-          </div>
-        )}
-      </main>
-
-      {/* Pie de página */}
-      {/* <-- EDITABLE: Puedes cambiar 'bg-card' por 'bg-white', 'bg-slate-100', etc. */}
-      <footer
-        className={`border-t mt-16 transition-colors duration-300 ${
-          isDarkMode ? "bg-gray-800 border-gray-700" : "bg-card border-border"
-        }`}
-      >
-        <div className="container mx-auto px-4 py-6">
-          <div
-            className={`text-center text-sm transition-colors duration-300 ${isDarkMode ? "text-gray-400" : "text-muted-foreground"}`}
-          >
-            <p>Simulaciones de Física Interactivas • Desarrollado para el aprendizaje educativo</p>
-            <p className="mt-1"></p>
-          </div>
-        </div>
-      </footer>
+          )}
+        </main>
+      </div>
     </div>
   )
 }
